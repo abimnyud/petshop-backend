@@ -1,9 +1,9 @@
-const deleteOrderHandler = (diHash) => {
+const deleteMemberHandler = (diHash) => {
     const {
         pool,
     } = diHash;
     
-    const deleteOrder = async (req, res) => {
+    const deleteMember = async (req, res) => {
         const { id } = req.params;
         
         try {
@@ -15,7 +15,7 @@ const deleteOrderHandler = (diHash) => {
                 }
 
                 
-                let sql_query = `CALL usp_CancelOrder(${id})`; 
+                let sql_query = `DELETE FROM members WHERE member_id = (${id})`; 
 
                 connection.query(sql_query, (err, results) => {
                     connection.release();
@@ -40,7 +40,7 @@ const deleteOrderHandler = (diHash) => {
         }
     };
 
-    return deleteOrder;
+    return deleteMember;
 }
 
-module.exports = deleteOrderHandler;
+module.exports = deleteMemberHandler;

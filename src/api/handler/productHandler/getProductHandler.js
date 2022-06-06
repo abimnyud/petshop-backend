@@ -39,12 +39,19 @@ const getProductHandler = (diHash) => {
                     `
                 }
                 
-                connection.query(sql_query, (err, results, fields) => {
+                connection.query(sql_query, (err, results) => {
                     connection.release();
                     if (err) {
                         return res.status(500).json({
                             sucess: false,
                             message: err.message,
+                        });
+                    }
+
+                    if (results.length === 0) {
+                        return res.status(404).json({
+                            success: false,
+                            message: 'Product not found',
                         });
                     }
 

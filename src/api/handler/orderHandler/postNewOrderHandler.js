@@ -27,7 +27,7 @@ const postNewOrderHandler = (diHash) => {
                     );
                 `; 
 
-                connection.query(sql_query, (err, results, fields) => {
+                connection.query(sql_query, (err, results) => {
                     connection.release();
                     if (err) {
                         return res.status(500).json({

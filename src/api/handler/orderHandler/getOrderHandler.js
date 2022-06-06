@@ -23,15 +23,15 @@ const getOrderHandler = (diHash) => {
                         LEFT JOIN members ON orders.member_id = members.member_id
                         LEFT JOIN admins ON orders.admin_id = admins.admin_id
                         WHERE orders.order_number = ${id};
-                        SELECT  orders_products_links.order_number, products.id, products.name, products.image_url,
-                                products.price, orders_products_links.quantity
-                        FROM orders_products_links
-                        LEFT JOIN products ON orders_products_links.product_id = products.id
-                        WHERE orders_products_links.order_number = ${id};
+                        SELECT  op_links.order_number, products.id, products.name, products.image_url,
+                                products.price, op_links.quantity, (products.price * op_links.quantity) AS total
+                        FROM orders_products_links op_links
+                        LEFT JOIN products ON op_links.product_id = products.id
+                        WHERE op_links.order_number = ${id};
                     `; 
                 
 
-                connection.query(sql_query, (err, results, fields) => {
+                connection.query(sql_query, (err, results) => {
                     connection.release();
                     if (err) {
                         return res.status(500).json({
@@ -40,42 +40,31 @@ const getOrderHandler = (diHash) => {
                         });
                     }
 
-                    if (results.length === 0) {
+                    if (results[0].length === 0) {
                         return res.status(404).json({
                             success: false,
-                            message: `Order with id ${id} not found`,
+                            message: `Order not found`,
                         });
                     }
                     
-                    const resultOne = JSON.parse(JSON.stringify(results[0]));
-
+                    resultOne = results[0][0];
                     const data = {
-                        order_number: resultOne[0].order_number,
+                        order_number: resultOne.order_number,
                         member: {
-                            member_id: resultOne[0].member_id,
-                            name: resultOne[0].member_name,
+                            member_id: resultOne.member_id,
+                            name: resultOne.member_name,
                         },
-                        total: resultOne[0].total,
-                        status: resultOne[0].status,
-                        description: resultOne[0].description,
+                        total: resultOne.total,
+                        status: resultOne.status,
+                        description: resultOne.description,
                         admin: {
-                            admin_id: resultOne[0].admin_id,
-                            name: resultOne[0].admin_name,
+                            admin_id: resultOne.admin_id,
+                            name: resultOne.admin_name,
                         },
-                        products: [],
-                        created_at: resultOne[0].created_at,
-                        updated_at: resultOne[0].updated_at,
+                        products: results[1],
+                        created_at: resultOne.created_at,
+                        updated_at: resultOne.updated_at,
                     };
-                    
-                    results[1].forEach((item) => {
-                        data.products.push({
-                            product_id: item.id,
-                            name: item.name,
-                            image_url: item.image_url,
-                            price: item.price,
-                            quantity: item.quantity,
-                        })
-                    });
 
                     return res.status(200).json({
                         success: true,

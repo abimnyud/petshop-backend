@@ -1,24 +1,20 @@
 
-const postNewProductHandler = (diHash) => {
+const postNewMemberHandler = (diHash) => {
     const {
         pool,
     } = diHash;
     
-    const postNewProduct = async (req, res) => {
+    const postNewMember = async (req, res) => {
         const { 
-            name, description = "No description", 
-            price, stock, weight, category_id, 
-            sold = 0, image_url = null
+            name, phone 
         } = req.body;
 
-        if (!name || !description || !price || !stock || !weight || !category_id) {
+        if (!name || !phone) {
             return res.status(400).json({
                 success: false,
                 message: 'Bad Request',
             });
         }
-
-        // console.log(cart)
         pool.getConnection((err, connection) => {
             if (err) {
                 return res.status(500).json({
@@ -27,18 +23,7 @@ const postNewProductHandler = (diHash) => {
                 });
             }
 
-            const query = `
-                CALL usp_NewProduct(
-                    '${name}',
-                    '${description}',
-                    ${Number(price)},
-                    ${Number(stock)},
-                    ${Number(weight)},
-                    ${Number(category_id)},
-                    ${Number(sold)},
-                    '${image_url}'
-                )
-            `;
+            const query = `CALL usp_NewMember('${name}','${phone}')`;
 
             connection.query(query, (err, results) => {
                 connection.release();
@@ -49,7 +34,7 @@ const postNewProductHandler = (diHash) => {
                     });
                 } 
                 
-                res.status(200).json({
+                return res.status(200).json({
                     success: true,
                     results
                 });
@@ -57,7 +42,7 @@ const postNewProductHandler = (diHash) => {
         })
     };
 
-    return postNewProduct;
+    return postNewMember;
 }
 
-module.exports = postNewProductHandler;
+module.exports = postNewMemberHandler;

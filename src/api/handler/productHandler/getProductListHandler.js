@@ -60,7 +60,6 @@ const getProductListHandler = (diHash) => {
                         });
                     } 
                     
-                    results = JSON.parse(JSON.stringify(results));
                     const data = [];
                     
                     if (isPopulate) {

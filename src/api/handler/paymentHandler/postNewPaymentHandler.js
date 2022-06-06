@@ -1,24 +1,21 @@
 
-const postNewProductHandler = (diHash) => {
+const postNewPaymentHandler = (diHash) => {
     const {
         pool,
     } = diHash;
     
-    const postNewProduct = async (req, res) => {
+    const postNewPayment = async (req, res) => {
         const { 
-            name, description = "No description", 
-            price, stock, weight, category_id, 
-            sold = 0, image_url = null
+            order_number, use_points, paid_amount, method, admin_id
         } = req.body;
 
-        if (!name || !description || !price || !stock || !weight || !category_id) {
+        if (!order_number || use_points === null || !paid_amount || !method || !admin_id) {
             return res.status(400).json({
                 success: false,
                 message: 'Bad Request',
             });
         }
 
-        // console.log(cart)
         pool.getConnection((err, connection) => {
             if (err) {
                 return res.status(500).json({
@@ -28,15 +25,12 @@ const postNewProductHandler = (diHash) => {
             }
 
             const query = `
-                CALL usp_NewProduct(
-                    '${name}',
-                    '${description}',
-                    ${Number(price)},
-                    ${Number(stock)},
-                    ${Number(weight)},
-                    ${Number(category_id)},
-                    ${Number(sold)},
-                    '${image_url}'
+                CALL usp_PayOrder(
+                    ${order_number},
+                    ${use_points},
+                    ${paid_amount},
+                    '${method}',
+                    ${admin_id}
                 )
             `;
 
@@ -57,7 +51,7 @@ const postNewProductHandler = (diHash) => {
         })
     };
 
-    return postNewProduct;
+    return postNewPayment;
 }
 
-module.exports = postNewProductHandler;
+module.exports = postNewPaymentHandler;

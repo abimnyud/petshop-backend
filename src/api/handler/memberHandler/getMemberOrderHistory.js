@@ -1,21 +1,23 @@
-const deleteOrderHandler = (diHash) => {
+const getMemberOrderHistoryListHandler = (diHash) => {
     const {
         pool,
     } = diHash;
     
-    const deleteOrder = async (req, res) => {
+    const getMemberOrderHistoryList = async (req, res) => {
         const { id } = req.params;
-        
+
         try {
             pool.getConnection((err, connection) => {
                 if (err) {
                     return res.status(500).json({
                         message: err.message,
                     });
-                }
-
+                } 
                 
-                let sql_query = `CALL usp_CancelOrder(${id})`; 
+                let sql_query = `
+                    SELECT * FROM orders
+                    WHERE member_id = ${id}
+                `
 
                 connection.query(sql_query, (err, results) => {
                     connection.release();
@@ -25,11 +27,12 @@ const deleteOrderHandler = (diHash) => {
                             message: err.message,
                         });
                     }
-    
+
                     return res.status(200).json({
                         success: true,
-                        results,
+                        data: results,
                     });
+                    
                 });
             })
         } catch (err) {
@@ -40,7 +43,7 @@ const deleteOrderHandler = (diHash) => {
         }
     };
 
-    return deleteOrder;
+    return getMemberOrderHistoryList;
 }
 
-module.exports = deleteOrderHandler;
+module.exports = getMemberOrderHistoryListHandler;
