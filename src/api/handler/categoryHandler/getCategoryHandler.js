@@ -1,18 +1,11 @@
-const getAdminListHandler = (diHash) => {
+const getCategoryHandler = (diHash) => {
     const {
         pool,
     } = diHash;
     
-    const getAdminList = async (req, res) => {        
-        const { 
-            direction = "asc",
-            page = 1,
-            length = 10
-        } = req.query;
+    const getCategory = async (req, res) => {       
+        const { id } = req.params;
         
-        const start = (page - 1) * (length);
-        const sortBy = "admins.created_at";
-
         try {
             pool.getConnection((err, connection) => {
                 if (err) {
@@ -22,12 +15,7 @@ const getAdminListHandler = (diHash) => {
                     });
                 } 
 
-                let sql_query = `
-                    SELECT * FROM admins
-                    ORDER BY ${sortBy} ${direction}
-                    LIMIT ${Number(start)}, ${Number(length)}; 
-                    SELECT COUNT(*) AS total FROM admins;
-                `;
+                let sql_query = `SELECT * FROM categories WHERE id = ${id}`;
                 
                 connection.query(sql_query, (err, results) => {
                     connection.release();
@@ -37,15 +25,17 @@ const getAdminListHandler = (diHash) => {
                             message: err.message,
                         });
                     }
+
+                    if (results.length === 0) {
+                        return res.status(404).json({
+                            success: false,
+                            message: 'Category not found',
+                        });
+                    }
                     
                     return res.status(200).json({
                         success: true,
-                        data: results[0],
-                        meta: {
-                            page: Number(page),
-                            length: Number(length),
-                            total: results[1][0].total,
-                        }
+                        data: results[0]
                     });
                 });
             })
@@ -57,7 +47,7 @@ const getAdminListHandler = (diHash) => {
         }
     };
 
-    return getAdminList;
+    return getCategory;
 }
 
-module.exports = getAdminListHandler;
+module.exports = getCategoryHandler;

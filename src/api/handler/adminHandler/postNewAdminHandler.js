@@ -1,4 +1,3 @@
-
 const postNewProductHandler = (diHash) => {
     const {
         pool,

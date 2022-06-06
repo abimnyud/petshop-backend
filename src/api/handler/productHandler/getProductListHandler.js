@@ -106,7 +106,7 @@ const getProductListHandler = (diHash) => {
                         data: data,
                         meta: {
                             page: Number(page),
-                            length: Number(length) > results[1][0].total ? results[1][0].total : Number(length),
+                            length: Number(length),
                             total: results[1][0].total,
                         }
                     });

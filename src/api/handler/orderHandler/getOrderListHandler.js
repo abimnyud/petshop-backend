@@ -114,7 +114,7 @@ const getOrderListHandler = (diHash) => {
                         data,
                         meta: {
                             page: Number(page),
-                            length: Number(length) > results[isPopulate ? 2 : 1][0].total ? results[isPopulate ? 2 : 1][0].total : Number(length),
+                            length: Number(length),
                             total: results[isPopulate ? 2 : 1][0].total
                         }
                     });

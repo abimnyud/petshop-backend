@@ -3,6 +3,7 @@ const productRoutes = require('./productRoutes');
 const memberRoutes = require('./memberRoutes');
 const paymentRoutes = require('./paymentRoutes'); 
 const adminRoutes = require('./adminRoutes');
+const categoryRoutes = require('./categoryRoutes');
 
 const routes = (diHash) => {
     const {
@@ -16,6 +17,7 @@ const routes = (diHash) => {
     router.use(memberRoutes(diHash));
     router.use(paymentRoutes(diHash));
     router.use(adminRoutes(diHash));
+    router.use(categoryRoutes(diHash));
 
     return router;
 }

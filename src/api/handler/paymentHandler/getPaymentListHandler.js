@@ -71,8 +71,8 @@ const getPaymentListHandler = (diHash) => {
                         success: true,
                         data: data,
                         meta: {
-                            page: page,
-                            length: length > results[1][0].total ? results[1][0].total : length,
+                            page: Number(page),
+                            length: Number(length),
                             total: results[1][0].total,
                         }
                     });
