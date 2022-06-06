@@ -4,21 +4,24 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 
 // internal dependencies
-const config = require('./config');
-const auth = require('./api/auth');
+// const auth = require('./api/auth');
 const routes = require('./api/routes');
+const handlerHash = require('./api/handler');
+const pool = require('../connection/dbConnect');
 
 const app = express();
 
 const diHash = {
     express,
-    jwt
+    jwt,
+    pool,
+    handlerHash
 }
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-// app.use("/api", routes);
+app.use("/api", routes(diHash));
 
 app.use((err, req, res, next) => {
     console.error(err);
