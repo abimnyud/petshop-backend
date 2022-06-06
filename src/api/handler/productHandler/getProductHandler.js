@@ -1,4 +1,3 @@
-
 const getProductHandler = (diHash) => {
     const {
         pool,

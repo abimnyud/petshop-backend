@@ -2,6 +2,7 @@
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 // internal dependencies
 // const auth = require('./api/auth');
@@ -14,6 +15,7 @@ const app = express();
 const diHash = {
     express,
     jwt,
+    bcrypt,
     pool,
     handlerHash
 }

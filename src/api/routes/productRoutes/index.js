@@ -2,7 +2,7 @@ const getProductListRoute = require('./getProductListRoute');
 const postNewProductRoute = require('./postNewProductRoute');
 const getProductRoute = require('./getProductRoute');
 const deleteProductRoute = require('./deleteProductRoute');
-const postUpdateProductRoute = require('./postUpdateProductRoute');
+const putProductRoute = require('./putProductRoute');
 
 const productRoutes = (diHash) => {
     const {
@@ -15,7 +15,7 @@ const productRoutes = (diHash) => {
     router.use(postNewProductRoute(diHash));
     router.use(getProductRoute(diHash));
     router.use(deleteProductRoute(diHash));
-    router.use(postUpdateProductRoute(diHash));
+    router.use(putProductRoute(diHash));
 
     return router;
 }
