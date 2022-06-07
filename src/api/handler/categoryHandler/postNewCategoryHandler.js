@@ -1,8 +1,6 @@
-
 const postNewCategoryHandler = (diHash) => {
     const {
         pool,
-        bcrypt,
     } = diHash;
     
     const postNewCategory = async (req, res) => {

@@ -4,6 +4,7 @@ const memberHandler = require('./memberHandler');
 const paymentHandler = require('./paymentHandler');
 const adminHandler = require('./adminHandler');
 const categoryHandler = require('./categoryHandler');
+const authHandler = require('./authHandler');
 
 const handlerList = [
     productHandler,
@@ -11,7 +12,8 @@ const handlerList = [
     memberHandler,
     paymentHandler,
     adminHandler,
-    categoryHandler
+    categoryHandler,
+    authHandler
 ]
 
 const handlerHash = {};
