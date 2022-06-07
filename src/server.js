@@ -4,6 +4,8 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const cookieParser = require('cookie-parser');
+const morgan = require('morgan');
+const helmet = require('helmet');
 
 // internal dependencies
 // const auth = require('./api/auth');
@@ -23,10 +25,13 @@ const diHash = {
     middlewareHash
 }
 
+app.use(helmet());
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+app.use(morgan('combined'));
+app.use(middlewareHash.verifyAPIKey(diHash));
 app.use("/api", middlewareHash.validation(diHash), routes(diHash));
 app.use("/auth", authenticateRoutes(diHash));
 

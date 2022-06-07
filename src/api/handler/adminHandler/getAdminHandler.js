@@ -13,7 +13,10 @@ const getAdminHandler = (diHash) => {
                     });
                 } 
 
-                let sql_query = `SELECT * FROM admins WHERE admin_id = ${req.params.id};`;
+                let sql_query = `
+                    SELECT admin_id, name, username, status, created_at, updated_at 
+                    FROM admins WHERE admin_id = ${req.params.id}
+                `;
                 
                 connection.query(sql_query, (err, results) => {
                     connection.release();

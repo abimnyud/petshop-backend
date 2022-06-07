@@ -23,7 +23,7 @@ const getAdminListHandler = (diHash) => {
                 } 
 
                 let sql_query = `
-                    SELECT * FROM admins
+                    SELECT admin_id, name, username, status, created_at, updated_at FROM admins
                     ORDER BY ${sortBy} ${direction}
                     LIMIT ${Number(start)}, ${Number(length)}; 
                     SELECT COUNT(*) AS total FROM admins;
